@@ -54,7 +54,7 @@ data class CirclePathLines(
             points.drop(1).dropLast(1).forEach {
                 lineTo(it)
                 if (drawDownwardLines) {
-                    relativeLineTo(Offset(x = 0f, y = size.height - it.y))
+                    lineTo(Offset(x = it.x, y = size.height))
                     moveTo(it)
                 }
             }
@@ -93,14 +93,14 @@ data class CirclePathLines(
             DoubleSlider(
                 minWidth,
                 MIN_WIDTH,
-                maxWidth,
+                maxWidth - 1,
                 "Minimum width"
             ) { newValue -> onValueChange(copy(minWidth = newValue)) }
         }
         item {
             DoubleSlider(
                 maxWidth,
-                minWidth,
+                minWidth + 1,
                 MAX_WIDTH,
                 "Maximum width"
             ) { newValue -> onValueChange(copy(maxWidth = newValue)) }

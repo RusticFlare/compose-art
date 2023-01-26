@@ -11,6 +11,7 @@ import com.github.rusticflare.compose.BooleanSwitch
 import com.github.rusticflare.compose.DoubleSlider
 import com.github.rusticflare.compose.IntSlider
 import kotlin.math.*
+import kotlin.random.Random
 
 private const val MIN_RADIUS = Float.MIN_VALUE.toDouble()
 private const val MAX_RADIUS = 900.0
@@ -130,12 +131,17 @@ data class CirclePathLines(
     }
 }
 
-private data class Circle(
+data class Circle(
     val radius: Float,
     val center: Offset,
 )
 
-private val Circle.rect
+fun Circle.randomPoint(random: Random) = center + PolarCoordinate(
+    distance = sqrt(random.nextFloat()) * radius,
+    angle = random.nextFloat() * 2 * PI.toFloat(),
+)
+
+val Circle.rect
     get() = Rect(center = center, radius = radius)
 
 private fun Circle.offsetAt(angle: Float) = center + PolarCoordinate(distance = radius, angle = angle)
@@ -144,19 +150,19 @@ private operator fun Circle.contains(offset: Offset) =
     (offset - center).getDistanceSquared() <= radius * radius
 
 
-private data class PolarCoordinate(
+data class PolarCoordinate(
     val distance: Float,
     val angle: Float,
 )
 
-private fun PolarCoordinate.toOffset() = Offset(
+fun PolarCoordinate.toOffset() = Offset(
     x = (distance * cos(angle)),
     y = (distance * sin(angle)),
 )
 
 private fun Offset.angleTo(offset: Offset) = (offset - this).let { atan2(y = it.y, x = it.x) }
 
-private operator fun Offset.plus(polarCoordinate: PolarCoordinate) = plus(polarCoordinate.toOffset())
+operator fun Offset.plus(polarCoordinate: PolarCoordinate) = plus(polarCoordinate.toOffset())
 
 private fun Path.moveTo(offset: Offset) = moveTo(x = offset.x, y = offset.y)
 

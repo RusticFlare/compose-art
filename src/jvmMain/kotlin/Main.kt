@@ -30,7 +30,8 @@ fun main() = application {
         title = "rustic.flare",
     ) {
         MaterialTheme(colors = darkColors()) {
-            var circlePathLines by remember { mutableStateOf(CirclePathLines(show = true)) }
+            var arcLines by remember { mutableStateOf(ArcLines(show = true)) }
+            var circlePathLines by remember { mutableStateOf(CirclePathLines(show = false)) }
             var building by remember { mutableStateOf(Building(show = false)) }
             var coffee by remember { mutableStateOf(Coffee(show = false)) }
             var lineBlock by remember { mutableStateOf(LineBlock(show = false)) }
@@ -51,6 +52,7 @@ fun main() = application {
                             .width(900.dp)
                             .background(Color.Black)
                     ) {
+                        arcLines.draw()
                         circlePathLines.draw()
                         building.draw()
                         coffee.draw()
@@ -75,6 +77,7 @@ fun main() = application {
                                 modifier = Modifier.padding(vertical = 10.dp, horizontal = 10.dp)
                             )
                         }
+                        arcLines.settings { arcLines = it }
                         circlePathLines.settings { circlePathLines = it }
                         building.settings { building = it }
                         coffee.settings { coffee = it }
